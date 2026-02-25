@@ -47,7 +47,7 @@ from diffusers.pipelines.flux import FluxPipelineOutput
 # try to import DecoderOutput from diffusers.models
 try:
     from diffusers.models.autoencoders.vae import DecoderOutput
-except:
+except Exception:
     from diffusers.models.vae import DecoderOutput
 
 # Check if PyTorch XLA (for TPU support) is available

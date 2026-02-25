@@ -20,7 +20,7 @@ import torch.nn.functional as F
 from torch import nn
 try:
     from sageattention import sageattn
-except:
+except Exception:
     pass
 
 class FluxFp8AttnProcessor2_0:
