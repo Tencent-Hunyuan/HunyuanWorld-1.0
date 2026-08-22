@@ -243,5 +243,7 @@ dependencies:
       - trimesh>=4.6.1
       - cmake
       - pytorch3d @ git+https://github.com/facebookresearch/pytorch3d.git
-      - moge @ git+https://github.com/microsoft/MoGe.git
+      # Pin the MoGe-2 snapshot used when HunyuanWorld was released. Later main
+      # revisions require NumPy 2 and remove the legacy utils3d API used here.
+      - moge @ git+https://github.com/microsoft/MoGe.git@72fdee98935d93b69f7ce0a1369cfd6e2573fc2f
 prefix: /opt/conda/envs/HunyuanWorld
