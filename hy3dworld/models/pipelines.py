@@ -998,9 +998,10 @@ class FluxBasePipeline(DiffusionPipeline):
         )
 
         # Adjust timesteps based on strength parameter
-        if kwargs.get('is_inpainting', False):
+        if is_inpainting:
             timesteps, num_inference_steps = self.get_timesteps(
-            num_inference_steps, kwargs['strength'], device)
+                num_inference_steps, strength, device
+            )
 
         num_warmup_steps = max(
             len(timesteps) - num_inference_steps * self.scheduler.order, 0)
@@ -1351,8 +1352,13 @@ class FluxFillPipeline(
         strength,
         device
     ):
-        timesteps = timesteps[int((1 - strength) * num_inference_steps):]
-        return timesteps, num_inference_steps
+        init_timestep = min(num_inference_steps * strength, num_inference_steps)
+        t_start = int(max(num_inference_steps - init_timestep, 0))
+        timesteps = self.scheduler.timesteps[t_start * self.scheduler.order:]
+        if hasattr(self.scheduler, "set_begin_index"):
+            self.scheduler.set_begin_index(t_start * self.scheduler.order)
+
+        return timesteps, num_inference_steps - t_start
 
     def prepare_mask_latents(
         self,
